@@ -8,10 +8,9 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: z.string().min(1),
 
     // OAuth2 providers, optional, update as needed
-    GITHUB_CLIENT_ID: z.string().optional(),
-    GITHUB_CLIENT_SECRET: z.string().optional(),
-    GOOGLE_CLIENT_ID: z.string().optional(),
-    GOOGLE_CLIENT_SECRET: z.string().optional(),
+    MICROSOFT_CLIENT_ID: z.string().optional(),
+    MICROSOFT_CLIENT_SECRET: z.string().optional(),
+    MICROSOFT_TENANT_ID: z.string().optional(),
   },
   runtimeEnv: process.env,
 });

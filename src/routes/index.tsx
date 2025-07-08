@@ -1,80 +1,60 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { Mail } from "lucide-react";
+import { useEffect } from "react";
 import ThemeToggle from "~/components/ThemeToggle";
 import { Button } from "~/components/ui/button";
 import authClient from "~/lib/auth/auth-client";
+import logo from "~/logo.svg";
 
 export const Route = createFileRoute("/")({
   component: Home,
   loader: ({ context }) => {
-    return { user: context.user };
+    return { user: context.user, santinUser: context.santinUser };
   },
 });
 
 function Home() {
-  const { user } = Route.useLoaderData();
-  const queryClient = useQueryClient();
+  const { user, santinUser } = Route.useLoaderData();
   const router = useRouter();
 
+  useEffect(() => {
+    if (user) {
+      if (santinUser) {
+        router.navigate({ to: "/dashboard" });
+      } else {
+        router.navigate({ to: "/santin/login" });
+      }
+    }
+  }, [user, router, santinUser]);
+
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-10 p-2">
-      <div className="flex flex-col items-center gap-4">
-        <h1 className="text-3xl font-bold sm:text-4xl">React TanStarter</h1>
-        <div className="flex items-center gap-2 max-sm:flex-col">
-          This is an unprotected page:
-          <pre className="bg-card text-card-foreground rounded-md border p-1">
-            routes/index.tsx
-          </pre>
-        </div>
-      </div>
-
-      {user ? (
-        <div className="flex flex-col items-center gap-2">
-          <p>Welcome back, {user.name}!</p>
-          <Button type="button" asChild className="mb-2 w-fit" size="lg">
-            <Link to="/dashboard">Go to Dashboard</Link>
-          </Button>
-          <div className="text-center text-xs sm:text-sm">
-            Session user:
-            <pre className="max-w-screen overflow-x-auto px-2 text-start">
-              {JSON.stringify(user, null, 2)}
-            </pre>
-          </div>
-
-          <Button
-            onClick={async () => {
-              await authClient.signOut();
-              await queryClient.invalidateQueries({ queryKey: ["user"] });
-              await router.invalidate();
-            }}
-            type="button"
-            className="w-fit"
-            variant="destructive"
-            size="lg"
-          >
-            Sign out
-          </Button>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center gap-2">
-          <p>You are not signed in.</p>
-          <Button type="button" asChild className="w-fit" size="lg">
-            <Link to="/login">Log in</Link>
-          </Button>
-        </div>
-      )}
-
-      <div className="flex flex-col items-center gap-2">
-        <ThemeToggle />
-        <a
-          className="text-muted-foreground hover:text-foreground underline"
-          href="https://github.com/dotnize/react-tanstarter"
-          target="_blank"
-          rel="noreferrer noopener"
+    <main className="bg-background flex h-full w-full flex-col items-center justify-center p-4">
+      <div className="space-y-6 text-center">
+        <img
+          src={logo}
+          alt="Grupo Santin"
+          width={120}
+          height={120}
+          className="mx-auto object-contain"
+          loading="eager"
+        />
+        <h1 className="text-2xl font-semibold">Grupo Santin</h1>
+        <Button
+          variant="outline"
+          className="dark:hover:text-background flex items-center gap-2 border border-gray-300 hover:bg-gray-50"
+          onClick={() =>
+            authClient.signIn.social({
+              provider: "microsoft",
+              callbackURL: "/santin/login",
+            })
+          }
         >
-          dotnize/react-tanstarter
-        </a>
+          <Mail className="h-4 w-4" />
+          <span className="hover:">Fazer login com e-mail</span>
+        </Button>
+
+        <ThemeToggle />
       </div>
-    </div>
+    </main>
   );
 }

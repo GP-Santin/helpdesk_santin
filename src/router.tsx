@@ -1,38 +1,39 @@
-import { QueryClient } from "@tanstack/react-query";
-import { createRouter as createTanStackRouter } from "@tanstack/react-router";
+import { createRouter as createTanstackRouter } from "@tanstack/react-router";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
+import * as TanstackQuery from "./integrations/tanstack-query/root-provider";
 
-import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
-import { NotFound } from "~/components/NotFound";
+// Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
-export function createRouter() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 2, // 2 minutes
-      },
-    },
-  });
+import { TanstackQueryProviderWithTRPC } from "./integrations/tanstack-query/root-provider";
+import "./styles.css";
 
-  return routerWithQueryClient(
-    createTanStackRouter({
+// Create a new router instance
+export const createRouter = () => {
+  const router = routerWithQueryClient(
+    createTanstackRouter({
       routeTree,
-      context: { queryClient, user: null },
-      defaultPreload: "intent",
-      // react-query will handle data fetching & caching
-      // https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#passing-all-loader-events-to-an-external-cache
-      defaultPreloadStaleTime: 0,
-      defaultErrorComponent: DefaultCatchBoundary,
-      defaultNotFoundComponent: NotFound,
+      context: {
+        ...TanstackQuery.getContext(),
+        //   user: null,
+        //   santinUser: null,
+      },
       scrollRestoration: true,
-      defaultStructuralSharing: true,
-    }),
-    queryClient,
-  );
-}
+      defaultPreloadStaleTime: 0,
 
+      Wrap: (props: { children: React.ReactNode }) => {
+        return (
+          <TanstackQueryProviderWithTRPC>{props.children}</TanstackQueryProviderWithTRPC>
+        );
+      },
+    }),
+    TanstackQuery.getContext().queryClient,
+  );
+
+  return router;
+};
+
+// Register the router instance for type safety
 declare module "@tanstack/react-router" {
   interface Register {
     router: ReturnType<typeof createRouter>;

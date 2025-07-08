@@ -1,10 +1,10 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/(auth)")({
+export const Route = createFileRoute("/(auth)/santin")({
   component: RouteComponent,
   beforeLoad: async ({ context }) => {
     const REDIRECT_URL = "/dashboard";
-    if (context.user) {
+    if (context.santinUser) {
       throw redirect({
         to: REDIRECT_URL,
       });

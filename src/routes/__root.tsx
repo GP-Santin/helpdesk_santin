@@ -11,19 +11,29 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
+import { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
+import { Toaster } from "~/components/ui/sonner";
+import { TRPCRouter } from "~/integrations/trpc/router";
+import { getSantinUser } from "~/lib/auth/functions/getSantinUser";
 import { getUser } from "~/lib/auth/functions/getUser";
 import appCss from "~/styles.css?url";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
-  user: Awaited<ReturnType<typeof getUser>>;
+  //   user: Awaited<ReturnType<typeof getUser>>;
+  //   santinUser: Awaited<ReturnType<typeof getSantinUser>>;
+  trpc: TRPCOptionsProxy<TRPCRouter>;
 }>()({
   beforeLoad: async ({ context }) => {
     const user = await context.queryClient.fetchQuery({
       queryKey: ["user"],
       queryFn: ({ signal }) => getUser({ signal }),
     }); // we're using react-query for caching, see router.tsx
-    return { user };
+    const santinUser = await context.queryClient.fetchQuery({
+      queryKey: ["santinUser"],
+      queryFn: ({ signal }) => getSantinUser({ signal }),
+    });
+    return { user, santinUser, trpc: context.trpc };
   },
   head: () => ({
     meta: [
@@ -62,18 +72,18 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="h-screen w-screen">
         <ScriptOnce>
           {`document.documentElement.classList.toggle(
             'dark',
             localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
             )`}
         </ScriptOnce>
-
+        <Toaster richColors toastOptions={{}} theme="system" />
         {children}
 
         <ReactQueryDevtools buttonPosition="bottom-left" />
-        <TanStackRouterDevtools position="bottom-right" />
+        <TanStackRouterDevtools position="top-right" />
 
         <Scripts />
       </body>
