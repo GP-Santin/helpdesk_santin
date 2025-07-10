@@ -1,4 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
+import { createIsomorphicFn, createServerFn } from "@tanstack/react-start";
+import { getWebRequest } from "@tanstack/react-start/server";
 import { createTRPCClient, httpBatchStreamLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import superjson from "superjson";
@@ -13,9 +15,21 @@ function getUrl() {
   return `${base}/api/trpc`;
 }
 
+const getRequestHeaders = createServerFn({ method: "GET" }).handler(async () => {
+  const request = getWebRequest()!;
+  const headers = new Headers(request.headers);
+
+  return Object.fromEntries(headers);
+});
+
+const headers = createIsomorphicFn()
+  .client(() => ({}))
+  .server(() => getRequestHeaders());
+
 export const trpcClient = createTRPCClient<TRPCRouter>({
   links: [
     httpBatchStreamLink({
+      headers,
       transformer: superjson,
       url: getUrl(),
     }),

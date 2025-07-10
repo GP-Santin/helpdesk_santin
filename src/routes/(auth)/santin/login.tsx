@@ -19,6 +19,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { useTRPC } from "~/integrations/trpc/react";
 import logo from "~/logo.svg";
+import { setSantinTokenCookie } from "~/server/functions/auth/setSantinToken.server";
 
 export const Route = createFileRoute("/(auth)/santin/login")({
   component: RouteComponent,
@@ -45,7 +46,8 @@ function RouteComponent() {
   const handleLogin = (data: { email: string; senha: string }) => {
     setIsLoading(true);
     loginMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        setSantinTokenCookie({ data: { token: data.data?.token as string } });
         toast.success("Login realizado com sucesso!");
         router.navigate({ to: "/dashboard" });
       },

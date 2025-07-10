@@ -14,8 +14,8 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { Toaster } from "~/components/ui/sonner";
 import { TRPCRouter } from "~/integrations/trpc/router";
-import { getSantinUser } from "~/lib/auth/functions/getSantinUser";
 import { getUser } from "~/lib/auth/functions/getUser";
+import { getSantinUser } from "~/server/functions/auth/getSantinToken.server";
 import appCss from "~/styles.css?url";
 
 export const Route = createRootRouteWithContext<{

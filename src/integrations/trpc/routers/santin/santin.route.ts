@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getSantinToken } from "~/lib/auth/functions/getSantinUser";
 import { createTRPCRouter, publicProcedure } from "../../init";
 import { santinProcedure } from "./santin.procedure";
 
@@ -12,13 +13,13 @@ export const santinRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const response = await santinProcedure.login(input);
-
       return response;
     }),
 
   getUserSession: publicProcedure.query(async () => {
+    const token = await getSantinToken();
     const response = await santinProcedure.getUserSession({
-      token: "123",
+      token: token?.id.toString() || "",
     });
 
     return response.data;

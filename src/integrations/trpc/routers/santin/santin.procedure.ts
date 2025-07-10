@@ -26,11 +26,14 @@ export const santinProcedure = {
         requestBody: input,
       });
     }
-    const data = await response.json();
+    const data: { token: string } = await response.json();
 
     return {
       status: response.status,
-      data,
+      data: {
+        token: data.token,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+      },
     };
   },
 

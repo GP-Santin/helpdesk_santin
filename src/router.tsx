@@ -5,6 +5,7 @@ import * as TanstackQuery from "./integrations/tanstack-query/root-provider";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
+import { NotFound } from "./components/NotFound";
 import { TanstackQueryProviderWithTRPC } from "./integrations/tanstack-query/root-provider";
 import "./styles.css";
 
@@ -15,12 +16,10 @@ export const createRouter = () => {
       routeTree,
       context: {
         ...TanstackQuery.getContext(),
-        //   user: null,
-        //   santinUser: null,
       },
       scrollRestoration: true,
       defaultPreloadStaleTime: 0,
-
+      defaultNotFoundComponent: () => <NotFound />,
       Wrap: (props: { children: React.ReactNode }) => {
         return (
           <TanstackQueryProviderWithTRPC>{props.children}</TanstackQueryProviderWithTRPC>
