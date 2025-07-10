@@ -1,4 +1,4 @@
-import { ModeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import authClient from "@/lib/auth/auth-client";
 import logo from "@/logo.svg";
@@ -53,7 +53,7 @@ function Home() {
           <span className="hover:">Fazer login com e-mail</span>
         </Button>
 
-        <ModeToggle />
+        <ThemeToggle />
       </div>
     </main>
   );

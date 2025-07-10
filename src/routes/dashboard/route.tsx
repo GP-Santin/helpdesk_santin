@@ -1,4 +1,4 @@
-import { ModeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 
@@ -26,7 +26,7 @@ function DashboardLayout() {
             routes/dashboard/route.tsx
           </pre>
         </div>
-        <ModeToggle />
+        <ThemeToggle />
         <Button type="button" asChild className="w-fit" size="lg">
           <Link to="/">Back to index</Link>
         </Button>

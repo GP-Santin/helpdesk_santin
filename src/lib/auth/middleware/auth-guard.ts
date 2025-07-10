@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { getSantinUser } from "@/server/functions/auth/getSantinToken.server";
+import { getSantinUser } from "@/server/functions/auth/getSantinUser.server";
 import { createMiddleware } from "@tanstack/react-start";
 import { getWebRequest, setResponseStatus } from "@tanstack/react-start/server";
 

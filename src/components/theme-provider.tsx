@@ -1,3 +1,5 @@
+import { ScriptOnce } from "@tanstack/react-router";
+import { outdent } from "outdent";
 import { createContext, use, useEffect, useState } from "react";
 
 type Theme = "dark" | "light" | "system";
@@ -62,6 +64,26 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext {...props} value={value}>
+      <ScriptOnce>
+        {outdent /* js */ `
+          function initTheme() {
+            if (typeof localStorage === 'undefined') return
+
+            const localTheme = localStorage.getItem('theme')
+            const preferTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+            const resolvedTheme = localTheme === null || localTheme === 'system' ? preferTheme : localTheme
+
+            if (localTheme === null) {
+              localStorage.setItem('theme', 'system')
+            }
+
+            document.documentElement.dataset.theme = resolvedTheme
+            document.documentElement.style.colorScheme = resolvedTheme
+          }
+
+          initTheme()
+        `}
+      </ScriptOnce>
       {children}
     </ThemeProviderContext>
   );

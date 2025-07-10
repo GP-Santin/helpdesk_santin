@@ -10,11 +10,11 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCRouter } from "@/integrations/trpc/router";
 import { getUser } from "@/lib/auth/functions/getUser";
-import { getSantinUser } from "@/server/functions/auth/getSantinToken.server";
+import { getSantinUser } from "@/server/functions/auth/getSantinUser.server";
 import appCss from "@/styles.css?url";
 import { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 

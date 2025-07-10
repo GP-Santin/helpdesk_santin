@@ -5,7 +5,7 @@ import * as TanstackQuery from "./integrations/tanstack-query/root-provider";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
-import { NotFound } from "./components/NotFound";
+import { NotFound } from "./components/not-found";
 import { TanstackQueryProviderWithTRPC } from "./integrations/tanstack-query/root-provider";
 import "./styles.css";
 
@@ -16,6 +16,9 @@ export const createRouter = () => {
       routeTree,
       context: {
         ...TanstackQuery.getContext(),
+        user: null,
+        santinUser: null,
+        trpc: TanstackQuery.getContext().trpc,
       },
       scrollRestoration: true,
       defaultPreloadStaleTime: 0,
