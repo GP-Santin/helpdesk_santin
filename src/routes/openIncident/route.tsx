@@ -1,11 +1,11 @@
-import { ThemeToggle } from "@/components/theme-toggle";
+import { useTheme } from "@/components/theme";
 import { Button } from "@/components/ui/button";
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/openIncident")({
   component: DashboardLayout,
   beforeLoad: async ({ context }) => {
-    if (!context.user) {
+    if (!context.user || !context.santinUser) {
       throw redirect({ to: "/" });
     }
 
@@ -16,6 +16,7 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function DashboardLayout() {
+  const { toggle } = useTheme();
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-10 p-2">
       <div className="flex flex-col items-center gap-4">
@@ -26,9 +27,15 @@ function DashboardLayout() {
             routes/dashboard/route.tsx
           </pre>
         </div>
-        <ThemeToggle />
         <Button type="button" asChild className="w-fit" size="lg">
           <Link to="/">Back to index</Link>
+        </Button>
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 border border-gray-300 hover:bg-gray-50"
+          onClick={toggle}
+        >
+          Theme Toggle
         </Button>
       </div>
 

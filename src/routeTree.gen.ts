@@ -11,9 +11,9 @@
 import { createServerRootRoute } from "@tanstack/react-start/server";
 
 import { Route as rootRouteImport } from "./routes/__root";
-import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
+import { Route as OpenIncidentRouteRouteImport } from "./routes/openIncident/route";
 import { Route as IndexRouteImport } from "./routes/index";
-import { Route as DashboardIndexRouteImport } from "./routes/dashboard/index";
+import { Route as AdminDashboardRouteRouteImport } from "./routes/admin/dashboard/route";
 import { Route as authSantinRouteRouteImport } from "./routes/(auth)/santin/route";
 import { Route as authSantinLoginRouteImport } from "./routes/(auth)/santin/login";
 import { ServerRoute as ApiTrpcSplatServerRouteImport } from "./routes/api/trpc/$";
@@ -21,9 +21,9 @@ import { ServerRoute as ApiAuthSplatServerRouteImport } from "./routes/api/auth/
 
 const rootServerRouteImport = createServerRootRoute();
 
-const DashboardRouteRoute = DashboardRouteRouteImport.update({
-  id: "/dashboard",
-  path: "/dashboard",
+const OpenIncidentRouteRoute = OpenIncidentRouteRouteImport.update({
+  id: "/openIncident",
+  path: "/openIncident",
   getParentRoute: () => rootRouteImport,
 } as any);
 const IndexRoute = IndexRouteImport.update({
@@ -31,10 +31,10 @@ const IndexRoute = IndexRouteImport.update({
   path: "/",
   getParentRoute: () => rootRouteImport,
 } as any);
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: "/",
-  path: "/",
-  getParentRoute: () => DashboardRouteRoute,
+const AdminDashboardRouteRoute = AdminDashboardRouteRouteImport.update({
+  id: "/admin/dashboard",
+  path: "/admin/dashboard",
+  getParentRoute: () => rootRouteImport,
 } as any);
 const authSantinRouteRoute = authSantinRouteRouteImport.update({
   id: "/(auth)/santin",
@@ -59,43 +59,50 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
-  "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/openIncident": typeof OpenIncidentRouteRoute;
   "/santin": typeof authSantinRouteRouteWithChildren;
-  "/dashboard/": typeof DashboardIndexRoute;
+  "/admin/dashboard": typeof AdminDashboardRouteRoute;
   "/santin/login": typeof authSantinLoginRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
+  "/openIncident": typeof OpenIncidentRouteRoute;
   "/santin": typeof authSantinRouteRouteWithChildren;
-  "/dashboard": typeof DashboardIndexRoute;
+  "/admin/dashboard": typeof AdminDashboardRouteRoute;
   "/santin/login": typeof authSantinLoginRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/": typeof IndexRoute;
-  "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/openIncident": typeof OpenIncidentRouteRoute;
   "/(auth)/santin": typeof authSantinRouteRouteWithChildren;
-  "/dashboard/": typeof DashboardIndexRoute;
+  "/admin/dashboard": typeof AdminDashboardRouteRoute;
   "/(auth)/santin/login": typeof authSantinLoginRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/dashboard" | "/santin" | "/dashboard/" | "/santin/login";
+  fullPaths:
+    | "/"
+    | "/openIncident"
+    | "/santin"
+    | "/admin/dashboard"
+    | "/santin/login";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/santin" | "/dashboard" | "/santin/login";
+  to: "/" | "/openIncident" | "/santin" | "/admin/dashboard" | "/santin/login";
   id:
     | "__root__"
     | "/"
-    | "/dashboard"
+    | "/openIncident"
     | "/(auth)/santin"
-    | "/dashboard/"
+    | "/admin/dashboard"
     | "/(auth)/santin/login";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
+  OpenIncidentRouteRoute: typeof OpenIncidentRouteRoute;
   authSantinRouteRoute: typeof authSantinRouteRouteWithChildren;
+  AdminDashboardRouteRoute: typeof AdminDashboardRouteRoute;
 }
 export interface FileServerRoutesByFullPath {
   "/api/auth/$": typeof ApiAuthSplatServerRoute;
@@ -125,11 +132,11 @@ export interface RootServerRouteChildren {
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/dashboard": {
-      id: "/dashboard";
-      path: "/dashboard";
-      fullPath: "/dashboard";
-      preLoaderRoute: typeof DashboardRouteRouteImport;
+    "/openIncident": {
+      id: "/openIncident";
+      path: "/openIncident";
+      fullPath: "/openIncident";
+      preLoaderRoute: typeof OpenIncidentRouteRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/": {
@@ -139,12 +146,12 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/dashboard/": {
-      id: "/dashboard/";
-      path: "/";
-      fullPath: "/dashboard/";
-      preLoaderRoute: typeof DashboardIndexRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
+    "/admin/dashboard": {
+      id: "/admin/dashboard";
+      path: "/admin/dashboard";
+      fullPath: "/admin/dashboard";
+      preLoaderRoute: typeof AdminDashboardRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
     };
     "/(auth)/santin": {
       id: "/(auth)/santin";
@@ -181,18 +188,6 @@ declare module "@tanstack/react-start/server" {
   }
 }
 
-interface DashboardRouteRouteChildren {
-  DashboardIndexRoute: typeof DashboardIndexRoute;
-}
-
-const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardIndexRoute: DashboardIndexRoute,
-};
-
-const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
-  DashboardRouteRouteChildren,
-);
-
 interface authSantinRouteRouteChildren {
   authSantinLoginRoute: typeof authSantinLoginRoute;
 }
@@ -207,8 +202,9 @@ const authSantinRouteRouteWithChildren = authSantinRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  OpenIncidentRouteRoute: OpenIncidentRouteRoute,
   authSantinRouteRoute: authSantinRouteRouteWithChildren,
+  AdminDashboardRouteRoute: AdminDashboardRouteRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
