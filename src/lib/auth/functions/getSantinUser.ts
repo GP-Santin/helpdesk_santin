@@ -1,6 +1,6 @@
+import { santinProcedure } from "@/integrations/trpc/routers/santin/santin.procedure";
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
-import { santinProcedure } from "~/integrations/trpc/routers/santin/santin.procedure";
 
 export const getSantinToken = createServerFn({ method: "GET" }).handler(async () => {
   const { headers } = getWebRequest();

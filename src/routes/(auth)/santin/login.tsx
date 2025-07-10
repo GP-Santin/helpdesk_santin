@@ -1,3 +1,16 @@
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useTRPC } from "@/integrations/trpc/react";
+import logo from "@/logo.svg";
+import { setSantinTokenCookie } from "@/server/functions/auth/setSantinToken.server";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { useMutation } from "@tanstack/react-query";
@@ -7,19 +20,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { Button } from "~/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { useTRPC } from "~/integrations/trpc/react";
-import logo from "~/logo.svg";
-import { setSantinTokenCookie } from "~/server/functions/auth/setSantinToken.server";
 
 export const Route = createFileRoute("/(auth)/santin/login")({
   component: RouteComponent,

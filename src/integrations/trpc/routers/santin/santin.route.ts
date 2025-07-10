@@ -1,5 +1,5 @@
+import { getSantinToken } from "@/lib/auth/functions/getSantinUser";
 import { z } from "zod";
-import { getSantinToken } from "~/lib/auth/functions/getSantinUser";
 import { createTRPCRouter, publicProcedure } from "../../init";
 import { santinProcedure } from "./santin.procedure";
 

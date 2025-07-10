@@ -1,10 +1,10 @@
+import { ModeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
+import authClient from "@/lib/auth/auth-client";
+import logo from "@/logo.svg";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Mail } from "lucide-react";
 import { useEffect } from "react";
-import ThemeToggle from "~/components/ThemeToggle";
-import { Button } from "~/components/ui/button";
-import authClient from "~/lib/auth/auth-client";
-import logo from "~/logo.svg";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -53,7 +53,7 @@ function Home() {
           <span className="hover:">Fazer login com e-mail</span>
         </Button>
 
-        <ThemeToggle />
+        <ModeToggle />
       </div>
     </main>
   );

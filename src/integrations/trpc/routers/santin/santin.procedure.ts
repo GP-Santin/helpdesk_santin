@@ -1,4 +1,4 @@
-import { ApiError } from "~/helpers/api-error";
+import { ApiError } from "@/helpers/api-error";
 import type { PromiseResponse } from "../types";
 import type {
   SantinLoginInput,

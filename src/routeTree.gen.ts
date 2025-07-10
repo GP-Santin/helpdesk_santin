@@ -16,7 +16,7 @@ import { Route as IndexRouteImport } from "./routes/index";
 import { Route as DashboardIndexRouteImport } from "./routes/dashboard/index";
 import { Route as authSantinRouteRouteImport } from "./routes/(auth)/santin/route";
 import { Route as authSantinLoginRouteImport } from "./routes/(auth)/santin/login";
-import { ServerRoute as ApiTrpcSplatServerRouteImport } from "./routes/api.trpc.$";
+import { ServerRoute as ApiTrpcSplatServerRouteImport } from "./routes/api/trpc/$";
 import { ServerRoute as ApiAuthSplatServerRouteImport } from "./routes/api/auth/$";
 
 const rootServerRouteImport = createServerRootRoute();

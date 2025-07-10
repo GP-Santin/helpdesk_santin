@@ -4,24 +4,24 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
-  ScriptOnce,
   Scripts,
 } from "@tanstack/react-router";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { Toaster } from "@/components/ui/sonner";
+import { TRPCRouter } from "@/integrations/trpc/router";
+import { getUser } from "@/lib/auth/functions/getUser";
+import { getSantinUser } from "@/server/functions/auth/getSantinToken.server";
+import appCss from "@/styles.css?url";
 import { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
-import { Toaster } from "~/components/ui/sonner";
-import { TRPCRouter } from "~/integrations/trpc/router";
-import { getUser } from "~/lib/auth/functions/getUser";
-import { getSantinUser } from "~/server/functions/auth/getSantinToken.server";
-import appCss from "~/styles.css?url";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
-  //   user: Awaited<ReturnType<typeof getUser>>;
-  //   santinUser: Awaited<ReturnType<typeof getSantinUser>>;
+  user: Awaited<ReturnType<typeof getUser>>;
+  santinUser: Awaited<ReturnType<typeof getSantinUser>>;
   trpc: TRPCOptionsProxy<TRPCRouter>;
 }>()({
   beforeLoad: async ({ context }) => {
@@ -59,9 +59,11 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
+    <ThemeProvider>
+      <RootDocument>
+        <Outlet />
+      </RootDocument>
+    </ThemeProvider>
   );
 }
 
@@ -73,12 +75,6 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="h-screen w-screen">
-        <ScriptOnce>
-          {`document.documentElement.classList.toggle(
-            'dark',
-            localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-            )`}
-        </ScriptOnce>
         <Toaster richColors toastOptions={{}} theme="system" />
         {children}
 
